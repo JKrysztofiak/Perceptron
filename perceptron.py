@@ -1,5 +1,4 @@
-
-from array import *
+from random import randint
 
 def multiply_vector(v: list, m: float) -> list:
     res = []
@@ -35,15 +34,14 @@ def delta_rule(w: list, d: int, y: int, alfa: float, x: list, t: float) -> list:
 
 
 def training(trainSet: list, classifiers: list, numOfAtt: int, alfa: float) -> list:
-    weights = [1]*numOfAtt
-    t = 0.75
+    weights = [randint(-5,5) for x in range(0,numOfAtt)]
+    t = randint(-5,5)
 
     for row in trainSet:
         data = row.split(';')[:-1]
         classifier = str(row.split(';')[-1]).strip()
 
         net = calculate_net(weights, data)
-        # print(net)
         res = 0
         if net>=t:
            res = 1
@@ -52,26 +50,21 @@ def training(trainSet: list, classifiers: list, numOfAtt: int, alfa: float) -> l
             d=1 
             if(res==1): d=0
 
-            # print(f"B4: {weights} t={t} p={data} alfa={alfa} d={d} y={res}")
             weights = delta_rule(weights, d, res, alfa, data, t)
 
             t = float(weights[-1])
             weights = weights[:-1]
             
 
-            # print(f"DELTA RULE APPLIED {weights} t={t}")
+        
             net = calculate_net(weights, data)
             
             res = 0
             if net>=t:
                 res = 1
 
-            # if classifiers[res] == classifier:
-            #     print(f"NOW {classifier} == {classifiers[res]}")
-            # else:
-            #     print(f"{classifier} STILL IS NOT {classifiers[res]}")
-
     weights.append(t)
+    #zwraca wektor razem z wartością t na ostatnim miejscu
     return weights
 
 
@@ -108,15 +101,16 @@ def testing(testSet: list, w: list, classifiers: list) -> list:
             else:
                 accuracy[0][1]+=1
 
-        print(f"{classifiers[res]} ?= {classifier}")
-        print(f"Accuracy:")
-        print(f"{classifiers[0]}: ")
-        print(f"poprawnie: {accuracy[0][0]} \nwszystkie: {accuracy[0][1]}")
-        print(f"{classifiers[1]}: ")
-        print(f"poprawnie: {accuracy[1][0]} \nwszystkie: {accuracy[1][1]}")
-
     return accuracy
 
+def classify(x: list, w: list, t: float) -> str:
+    net = calculate_net(w, x)
+    
+    res = 0
+    if net>=t:
+        res = 1
+
+    return res
 
     
 
@@ -137,6 +131,9 @@ classifiers = ['Iris-setosa','Iris-versicolor']
 
 w_prim = training(trainSet, classifiers, numOfAtt, a)
 
+t = float(w_prim[-1])
+weights = w_prim[:-1]
+
 accuracy = testing(testSet, w_prim, classifiers)
 
 print(f"Accuracy:")
@@ -144,3 +141,14 @@ print(f"{classifiers[0]}: ")
 print(f"poprawnie: {accuracy[0][0]} \nwszystkie: {accuracy[0][1]}")
 print(f"{classifiers[1]}: ")
 print(f"poprawnie: {accuracy[1][0]} \nwszystkie: {accuracy[1][1]}")
+
+
+while True:
+    v = input("Your vector (separate with ';')[or exit]: ")
+    if v.lower() == 'exit': break
+
+    data = v.split(';')
+
+    print(f'Answere: {classifiers[classify(data, weights, t)]}')
+
+
