@@ -136,12 +136,9 @@ weights = w_prim[:-1]
 
 accuracy = testing(testSet, w_prim, classifiers)
 
-print(f"Accuracy:")
-print(f"{classifiers[0]}: ")
-print(f"poprawnie: {accuracy[0][0]} \nwszystkie: {accuracy[0][1]}")
-print(f"{classifiers[1]}: ")
-print(f"poprawnie: {accuracy[1][0]} \nwszystkie: {accuracy[1][1]}")
-
+print(f"Accuracy: {((accuracy[0][0]+accuracy[1][0])/(accuracy[0][1]+accuracy[1][1]))*100}%")
+print(f"{classifiers[0]}: {(accuracy[0][0]/accuracy[0][1])*100}%")
+print(f"{classifiers[1]}: {(accuracy[1][0]/accuracy[1][1]*100)}%")
 
 while True:
     v = input("Your vector (separate with ';')[or exit]: ")
@@ -150,5 +147,3 @@ while True:
     data = v.split(';')
 
     print(f'Answere: {classifiers[classify(data, weights, t)]}')
-
-
