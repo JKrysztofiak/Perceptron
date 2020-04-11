@@ -23,13 +23,24 @@ def calculate_net(w: list, p: list) -> float:
 
 
 def delta_rule(w: list, d: int, y: int, alfa: float, x: list, t: float) -> list:
-    
-    w.append(t)
-    x.append(-1)
 
-    w_prim = add_vectors(w, (multiply_vector(x,((d-y)*alfa))))
+    wp = w.copy()
+    xp = x.copy()
+
+    wp.append(t)
+    xp.append(-1)
+
+    w_prim = add_vectors(wp, (multiply_vector(xp,((d-y)*alfa))))
+
 
     return w_prim
+    
+    # w.append(t)
+    # x.append(-1)
+
+    # w_prim = add_vectors(w, (multiply_vector(x,((d-y)*alfa))))
+
+    # return w_prim
 
 
 
